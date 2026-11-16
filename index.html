@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Figtree:ital,wght@0,300..900;1,300..900&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&display=swap"
+    />
+    <link rel="stylesheet" href="tokens.css" id="tokens" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="playground.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <div class="root">
+      <main class="paper page" id="page">
+        <div class="scene">
+          <div class="square">
+            <div class="paper card" id="card">
+              <div class="square-body"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside class="controls">
+        <div class="top-bar">
+          <div class="row" role="group" aria-label="Light or dark">
+            <button type="button" class="scheme-button" data-scheme="light">Light</button>
+            <button type="button" class="scheme-button" data-scheme="dark">Dark</button>
+            <button type="button" class="scheme-button" data-scheme="system" id="system-scheme">System</button>
+          </div>
+          <div class="row">
+            <button type="button" class="save-button" id="save-css" disabled>Save CSS</button>
+            <button type="button" class="small-button" id="save-json" disabled>Save look.json</button>
+          </div>
+          <span class="status" role="status" id="status">Loading…</span>
+          <div class="row">
+            <button type="button" class="small-button" id="open-look" disabled>Open a look.json</button>
+            <button type="button" class="small-button" id="open-tokens" disabled>Use another tokens.css</button>
+            <input type="file" id="look-file" accept=".json,application/json" hidden />
+            <input type="file" id="tokens-file" accept=".css,text/css" hidden />
+          </div>
+        </div>
+        <div id="panels"></div>
+      </aside>
+    </div>
+  </body>
+</html>

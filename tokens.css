@@ -1,0 +1,521 @@
+/*
+ * Design tokens: the one place the app's look is defined.
+ *
+ * Every shared component in src/components/ui/ reads these, and screens don't set
+ * colors, sizes or radii of their own. To reskin the app, change the values here.
+ * Change a name only if you also change every component that uses it.
+ *
+ * A few places can't read CSS (the app icon, link previews, the browser's theme
+ * color, the crash screen). They use src/app/theme.ts, which repeats some of these
+ * values; a test checks the two still match.
+ *
+ * The app follows the phone's light or dark setting; there's no toggle. Dark mode
+ * overrides colors, shadows and the paper's texture, in the dark-mode block below.
+ * Reduced motion has its own block at the end.
+ *
+ * test/contrast.test.ts checks every pair of colors the components put together
+ * (text on its background, input edges, focus rings) in both modes. When a
+ * component puts a new pair together, add it there.
+ */
+
+/*
+ * The palette: the photocopy-zine tray, in OKLCH. One near-grey paper and seven
+ * fluoro inks (red, orange, yellow, green, blue, violet, pink). Every ramp shares
+ * one lightness ladder, so a step means the same lightness in any of them; each
+ * ink sits at 95% of the most chroma sRGB can show at that step. Components never
+ * use these directly; the --color-* names below pick a step for each job,
+ * separately in light and dark. Tuned with the look tool (/dev/paper).
+ *
+ * Not to be confused with the --paper-grain, --paper-gloss… tokens further down:
+ * --paper-50…950 is the paper-coloured ramp, those are the paper's texture.
+ */
+:root {
+  --paper-50: oklch(0.955 0.004 85);
+  --paper-100: oklch(0.923 0.006 85);
+  --paper-200: oklch(0.863 0.007 85);
+  --paper-300: oklch(0.76 0.007 85);
+  --paper-400: oklch(0.7 0.007 85);
+  --paper-500: oklch(0.62 0.007 85);
+  --paper-600: oklch(0.5 0.007 85);
+  --paper-700: oklch(0.445 0.006 85);
+  --paper-800: oklch(0.33 0.006 85);
+  --paper-900: oklch(0.26 0.007 85);
+  --paper-950: oklch(0.2 0.008 85);
+
+  --red-50: oklch(0.955 0.007 31);
+  --red-100: oklch(0.923 0.024 31);
+  --red-200: oklch(0.863 0.071 31);
+  --red-300: oklch(0.76 0.137 31);
+  --red-400: oklch(0.7 0.182 31);
+  --red-500: oklch(0.62 0.23 31);
+  --red-600: oklch(0.5 0.185 31);
+  --red-700: oklch(0.445 0.165 31);
+  --red-800: oklch(0.33 0.123 31);
+  --red-900: oklch(0.26 0.097 31);
+  --red-950: oklch(0.2 0.075 31);
+
+  --orange-50: oklch(0.955 0.008 55);
+  --orange-100: oklch(0.923 0.028 55);
+  --orange-200: oklch(0.863 0.082 55);
+  --orange-300: oklch(0.76 0.157 55);
+  --orange-400: oklch(0.7 0.165 55);
+  --orange-500: oklch(0.62 0.146 55);
+  --orange-600: oklch(0.5 0.118 55);
+  --orange-700: oklch(0.445 0.105 55);
+  --orange-800: oklch(0.33 0.078 55);
+  --orange-900: oklch(0.26 0.062 55);
+  --orange-950: oklch(0.2 0.048 55);
+
+  --yellow-50: oklch(0.955 0.04 104);
+  --yellow-100: oklch(0.923 0.117 104);
+  --yellow-200: oklch(0.863 0.173 104);
+  --yellow-300: oklch(0.76 0.153 104);
+  --yellow-400: oklch(0.7 0.14 104);
+  --yellow-500: oklch(0.62 0.124 104);
+  --yellow-600: oklch(0.5 0.1 104);
+  --yellow-700: oklch(0.445 0.089 104);
+  --yellow-800: oklch(0.33 0.066 104);
+  --yellow-900: oklch(0.26 0.053 104);
+  --yellow-950: oklch(0.2 0.041 104);
+
+  --green-50: oklch(0.955 0.023 147);
+  --green-100: oklch(0.923 0.084 147);
+  --green-200: oklch(0.863 0.244 147);
+  --green-300: oklch(0.76 0.215 147);
+  --green-400: oklch(0.7 0.198 147);
+  --green-500: oklch(0.62 0.175 147);
+  --green-600: oklch(0.5 0.141 147);
+  --green-700: oklch(0.445 0.126 147);
+  --green-800: oklch(0.33 0.093 147);
+  --green-900: oklch(0.26 0.074 147);
+  --green-950: oklch(0.2 0.057 147);
+
+  --blue-50: oklch(0.955 0.007 246);
+  --blue-100: oklch(0.923 0.024 246);
+  --blue-200: oklch(0.863 0.068 246);
+  --blue-300: oklch(0.76 0.124 246);
+  --blue-400: oklch(0.7 0.159 246);
+  --blue-500: oklch(0.62 0.152 246);
+  --blue-600: oklch(0.5 0.122 246);
+  --blue-700: oklch(0.445 0.109 246);
+  --blue-800: oklch(0.33 0.081 246);
+  --blue-900: oklch(0.26 0.064 246);
+  --blue-950: oklch(0.2 0.05 246);
+
+  --violet-50: oklch(0.955 0.007 297);
+  --violet-100: oklch(0.923 0.025 297);
+  --violet-200: oklch(0.863 0.073 297);
+  --violet-300: oklch(0.76 0.133 297);
+  --violet-400: oklch(0.7 0.171 297);
+  --violet-500: oklch(0.62 0.224 297);
+  --violet-600: oklch(0.5 0.258 297);
+  --violet-700: oklch(0.445 0.23 297);
+  --violet-800: oklch(0.33 0.171 297);
+  --violet-900: oklch(0.26 0.135 297);
+  --violet-950: oklch(0.2 0.104 297);
+
+  --pink-50: oklch(0.955 0.007 356);
+  --pink-100: oklch(0.923 0.026 356);
+  --pink-200: oklch(0.863 0.078 356);
+  --pink-300: oklch(0.76 0.153 356);
+  --pink-400: oklch(0.7 0.206 356);
+  --pink-500: oklch(0.62 0.241 356);
+  --pink-600: oklch(0.5 0.195 356);
+  --pink-700: oklch(0.445 0.173 356);
+  --pink-800: oklch(0.33 0.129 356);
+  --pink-900: oklch(0.26 0.102 356);
+  --pink-950: oklch(0.2 0.079 356);
+
+  /*
+   * Highlighter inks: the same seven hues at the lightness a highlighter pen has,
+   * as vivid as sRGB shows (97% of the most chroma there). Off the shared ladder on
+   * purpose: no ramp step is both this light and this bright.
+   */
+  --hi-violet: oklch(0.78 0.136 305);
+  --hi-yellow: oklch(0.93 0.193 107);
+  --hi-pink: oklch(0.8 0.126 355);
+  --hi-green: oklch(0.88 0.237 145);
+  --hi-orange: oklch(0.82 0.124 62);
+  --hi-blue: oklch(0.84 0.094 232);
+  --hi-red: oklch(0.76 0.139 30);
+}
+
+:root {
+  /* Form fields, scrollbars and the like follow light and dark too. */
+  color-scheme: light dark;
+
+  /* Color */
+  --color-bg: var(--paper-100);
+  /* Differs from the app (white there), so the card follows the paper hue. */
+  --color-surface: var(--paper-50);
+  --color-surface-muted: var(--paper-100);
+  /* Grouped lists on a plain page, like My maps' sections. */
+  --color-surface-grouped: #ffffff;
+  --color-text: var(--paper-950);
+  --color-text-muted: var(--paper-700);
+  --color-text-on-accent: #ffffff;
+  --color-text-inverse: var(--paper-100);
+  --color-surface-inverse: var(--paper-950);
+  /* Dividers and outlines that are decoration. */
+  --color-border: var(--paper-200);
+  /* Edges that show where a control is, like a text field's: 3:1 or more. */
+  --color-border-strong: var(--paper-600);
+  /* A fill with --color-text-on-accent on it (primary buttons). */
+  --color-accent: var(--paper-950);
+  /* The accent used as text, like the selected place's name. */
+  --color-accent-text: var(--pink-600);
+  --color-link: var(--pink-600);
+  --color-danger: var(--red-700);
+  /* A fill for the button that deletes, with --color-text-on-accent on it. */
+  --color-danger-fill: var(--red-600);
+  --color-focus: var(--blue-600);
+  --color-backdrop: rgba(0, 0, 0, 0.35);
+  --color-disabled-icon: var(--paper-400);
+  --color-grabber: var(--paper-300);
+  /* Where the map will be, while it loads: close to the map's own blank colour. */
+  --color-map-placeholder: var(--paper-100);
+  /* A place's note, the words people write about it. */
+  --color-note: var(--paper-950);
+  /* The color shadows will take. Not used yet: the --shadow-* tokens below are still black. */
+  --color-shadow: var(--paper-950);
+
+  /* Map */
+  --color-pin: var(--violet-500);
+  /* The ring round the GPS dot. */
+  --color-pin-border: var(--paper-950);
+  /* What sits on a layer's fill, like a legend switch's knob when it's on. */
+  --color-text-on-layer: #ffffff;
+  /*
+   * Friends' maps layered in a folder, one color each in the order they were
+   * added (src/lib/layers.ts). Your own maps use --color-pin. They need to stay
+   * apart from --color-pin and each other.
+   */
+  --color-layer-1: var(--yellow-200);
+  --color-layer-2: var(--pink-400);
+  --color-layer-3: var(--green-300);
+  --color-layer-4: var(--orange-300);
+  --color-layer-5: var(--blue-400);
+  --color-layer-6: var(--red-500);
+  /*
+   * A place's name run over with a highlighter in its pin's color (a map's list
+   * and its drawer): each ink's highlighter, and the text on it.
+   */
+  --color-pin-highlight: var(--hi-violet);
+  --color-layer-1-highlight: var(--hi-yellow);
+  --color-layer-2-highlight: var(--hi-pink);
+  --color-layer-3-highlight: var(--hi-green);
+  --color-layer-4-highlight: var(--hi-orange);
+  --color-layer-5-highlight: var(--hi-blue);
+  --color-layer-6-highlight: var(--hi-red);
+  --color-text-on-ink: #000000;
+  /* Highlighter ink soaks into paper: multiply on light; on dark paper it sits on top. */
+  --highlight-blend: multiply;
+  /* Search results on the map: quiet, so your places stay the loud ones. */
+  --color-pin-result: var(--paper-500);
+  --color-gps: var(--blue-500);
+  --color-gps-halo: color-mix(in srgb, var(--color-gps) 20%, transparent);
+  /*
+   * Pins (map/PinMark.tsx): flat fluoro ink that overprints the pins under it,
+   * like riso ink. Multiply on light paper; dark mode screens instead.
+   */
+  --pin-height: 44px;
+  /* Grown from the tip: a pin with a badge, and the selected one. */
+  --pin-scale-badge: 1.14;
+  --pin-scale-selected: 1.27;
+  --pin-ink: 0.9;
+  --pin-sheen: 0.2;
+  --pin-blend: multiply;
+  /* How far apart each person's pin sits at a place several people saved. */
+  --pin-fan: 9px;
+  --gps-size: 18px;
+  --gps-border: 3px;
+  --gps-halo: 6px;
+
+  /*
+   * The logo (ui/Wordmark.tsx; the icons are drawn from the same inks by
+   * scripts/logo/make.mjs): the word printed twice, the second pass slipped. The
+   * inks overprint like pins: multiply on light paper, screen on dark, a step lighter.
+   * test/logo.test.ts checks these are the inks in scripts/logo/logo.json.
+   */
+  --color-logo-1: var(--pink-500);
+  --color-logo-2: var(--blue-500);
+  --logo-blend: multiply;
+  --logo-size: 40px;
+  --logo-weight: 800;
+
+  /*
+   * Type. Body text in inputs stays at 16px or more so iOS doesn't zoom in.
+   * Headings are screen, sheet and dialog titles. Notes are what people write about
+   * a place, in lists and drawers and while typing them.
+   */
+  --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: var(--font-figtree), var(--font-system);
+  --font-heading: var(--font-fraunces), Georgia, serif;
+  /* Fraunces' own dials, both off: soft corners and wonky letters read as blurry. */
+  --heading-axes: "SOFT" 0, "WONK" 0;
+  --font-note: var(--font-body);
+  /* Small typewritten text: counts, who picked a place, field labels, toasts. */
+  --font-label: var(--font-courier), "Courier New", ui-monospace, monospace;
+  --text-xs: 13px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 21px;
+  --text-2xl: 26px;
+  --weight-medium: 500;
+  --weight-bold: 700;
+  --weight-button: 600;
+  --weight-label: 400;
+  --leading-body: normal;
+  /* Longer reading, like a full-screen message. */
+  --leading-relaxed: 1.5;
+  /* Big titles: lines close together, so a wrapped title reads as one. */
+  --leading-tight: 1.2;
+  /* Notes people wrote: room between lines, since this is what gets read. */
+  --leading-note: 1.2;
+  /* Links: the underline sits below the letters' tails instead of cutting them. */
+  --underline-offset: 0.15em;
+
+  /* Space */
+  --space-half: 2px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  /* Shape */
+  --radius-xs: 5px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-sheet: 20px;
+  --radius-full: 999px;
+  --border-width: 1px;
+  --focus-width: 2px;
+
+  /* Size */
+  --control-sm: 34px;
+  --control-md: 44px;
+  --control-lg: 48px;
+  /*
+   * The smallest tap area any control gets, whatever it looks like. Controls that
+   * draw smaller than this get an invisible area around them (ui/hit.module.css).
+   */
+  --hit-min: 44px;
+  /* On/off switches (a layer in the legend), and the color dot beside a layer. */
+  --switch-width: 40px;
+  --switch-height: 24px;
+  --switch-knob: 18px;
+  --swatch-size: 14px;
+  /* Pick-one options (which folder a map goes in). */
+  /* Room for a small button inside a text field, like Paste. */
+  --trailing-button: 72px;
+  --radio-size: 20px;
+  --radio-dot: 10px;
+  /* The "Ana + Tom" label under a pin several people recommend. */
+  --badge-height: 22px;
+  /* Longer names end in "…"; the place's drawer lists everyone. */
+  --badge-max-width: 160px;
+  --icon-sm: 18px;
+  --icon-md: 22px;
+  /* The handle at the top of sheets and drawers, and the area that taps it. */
+  --grabber-width: 36px;
+  --grabber-height: 4px;
+  --grabber-hit-width: 80px;
+  --grabber-hit-height: 18px;
+  /* The widest a plain page, or a dialog or message, gets on a big screen. */
+  --width-page: 560px;
+  --width-panel: 480px;
+  --width-shot: 240px; /* screenshots of the app on the landing page */
+  /* The tallest panels over the map get before they scroll: the sheet's list, a
+     list in a dialog, a drawer (which leaves the top of the map showing). */
+  --height-sheet-body: 45vh;
+  --height-list: 50vh;
+  --height-drawer: 85dvh;
+  /* How much the on-screen keyboard covers, kept current by ui/keyboard.ts while a
+     dialog, drawer or the sheet is showing. Panels pinned to the bottom sit on it. */
+  --keyboard-inset: 0px;
+
+  /* Depth */
+  --shadow-float: 0 1px 6px rgba(0, 0, 0, 0.2);
+  --shadow-sheet: 0 -1px 8px rgba(0, 0, 0, 0.15);
+  --shadow-gps: 0 1px 4px rgba(0, 0, 0, 0.3);
+  /* A switch's white knob on a layer's fluoro fill: a fine ring and a soft drop. */
+  --shadow-knob: 0 0 0 1px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.3);
+
+  /* State */
+  --opacity-disabled: 0.45;
+  /* How much a button shrinks while pressed. */
+  --press-scale: 0.97;
+
+  /*
+   * Layers, for things that float over the map. Dialogs aren't here: they use the
+   * browser's top layer, above everything.
+   */
+  --layer-controls: 2;
+  --layer-drawer: 4;
+  --layer-toast: 5;
+
+  /*
+   * Motion. Things come in on --ease-out over --duration-enter and leave faster.
+   * Movement is multiplied by --motion-distance, which reduced motion sets to 0,
+   * so things fade instead of slide.
+   */
+  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-press: 120ms;
+  --duration-enter: 260ms;
+  --duration-exit: 180ms;
+  /* A sheet pressed down onto the screen settles a little slower than a slide. */
+  --duration-press-down: 340ms;
+  --duration-spin: 800ms;
+  /* A loading placeholder's slow breathing. */
+  --duration-pulse: 1400ms;
+  --motion-distance: 1;
+
+  /*
+   * Paper: the material surfaces are made of (ui/paper.module.css, <Paper>, <Ink>).
+   * Light mode is matte stock; dark mode is a glossy stock where ink sits on top
+   * and catches light. Values tuned in the look tool (/dev/paper).
+   *
+   * Two tiles, drawn once by the browser and then reused like any image:
+   * grain (fine tooth) and mottle (slow unevenness, like pulp settling). Each is a
+   * mask of --paper-speck, at the strength below. Grain specks average half their
+   * strength; the contrast test checks text against that, with mottle at full and
+   * the sheen at its brightest.
+   */
+  --paper-speck: var(--paper-500);
+  --paper-shine: #ffffff;
+  --paper-grain: 0.03;
+  --paper-mottle: 0.015;
+  --paper-grain-size: 96px;
+  --paper-mottle-size: 720px;
+  --paper-grain-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.4 0 0 0 -.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --paper-mottle-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640'%3E%3Cfilter id='m' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.005' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 -1.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E");
+  /* A sheen across the stock, brightest at its peak. 0 is matte. */
+  --paper-gloss: 0;
+  --paper-sheen-angle: 160deg;
+  /* Where the sheen's corner glow fades out, and where its fainter second band
+     starts and peaks, along that angle. */
+  --paper-sheen-glow-end: 40%;
+  --paper-sheen-band-start: 62%;
+  --paper-sheen-band-peak: 80%;
+  /* How far each step of a sheet's seed shifts its grain, so neighbouring sheets
+     don't line up. Uneven numbers, so steps never repeat the tile. */
+  --paper-seed-step-x: 97px;
+  --paper-seed-step-y: 151px;
+  /* How much marks soak in (1) or sit on top (0). Keep --ink-filter at the same
+     step: round(porosity × 4), one of the five filters in ui/Ink.tsx. */
+  --paper-porosity: 0.2;
+  --ink-filter: url("#reccos-ink-1");
+  /* Text on soaking paper spreads a little, at most this far. */
+  --ink-bleed: 1.1px;
+  /* Marks that sit on glossy paper catch light, at most this far. */
+  --ink-glow: 0px;
+
+  /*
+   * Pasted on: dialogs and drawers are sheets glued onto the screen
+   * (ui/pasted.module.css). Picked in the look tool: glue, a fine deckled edge, a
+   * slight tilt, lifted a little, pressed down when they open. The --shadow-pasted
+   * and --paste-glue lines are built from the numbers above them, so the tool
+   * changes only those numbers.
+   */
+  --paste-tilt: 0.3deg;
+  /* How far the deckled edge wavers. */
+  --paste-rough: 1.5px;
+  /* Glue darkening the sheet near its edges, 0 to 1. */
+  --paste-soak: 0.45;
+  /* Opening: it starts this far up, this much bigger and this turned, then
+     settles. Movement is multiplied by --motion-distance. */
+  --paste-drop: 18px;
+  --paste-press: 0.06;
+  --paste-turn: 3deg;
+  /* How far it lifts off the page, 0 to 1, and how dark its shadow is. */
+  --paste-lift: 0.7;
+  --paste-shadow: 0.3;
+  /* Where it touches the page, and the shadow of it lifting: falling below a
+     sheet that floats (dialogs), above one pinned to the bottom (drawers). */
+  --shadow-pasted: 0 0.5px 0.6px color-mix(in srgb, var(--color-shadow) calc(var(--paste-shadow) * 93%), transparent),
+    0 calc(var(--paste-lift) * 10px) calc(var(--paste-lift) * 16px)
+      color-mix(in srgb, var(--color-shadow) calc(var(--paste-lift) * var(--paste-shadow) * 100%), transparent);
+  --shadow-pasted-up: 0 -0.5px 0.6px color-mix(in srgb, var(--color-shadow) calc(var(--paste-shadow) * 93%), transparent),
+    0 calc(var(--paste-lift) * -4px) calc(var(--paste-lift) * 16px)
+      color-mix(in srgb, var(--color-shadow) calc(var(--paste-lift) * var(--paste-shadow) * 100%), transparent);
+  /* The glue soaking in: how far in from the edge, and how dark at most. */
+  --paste-glue: inset 0 0 calc(var(--paste-soak) * 16px) calc(var(--paste-soak) * 3px)
+    color-mix(in srgb, var(--paper-speck) calc(var(--paste-soak) * 22%), transparent);
+}
+
+/* Dark mode: the same names, darker values. Anything not listed here stays as above. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: var(--paper-950);
+    --color-surface: var(--paper-950);
+    --color-surface-muted: var(--paper-900);
+    --color-surface-grouped: var(--paper-900);
+    --color-text: var(--paper-50);
+    --color-text-muted: var(--paper-300);
+    --color-text-on-accent: var(--paper-950);
+    --color-text-inverse: var(--paper-950);
+    --color-surface-inverse: var(--paper-50);
+    --color-border: var(--paper-800);
+    --color-border-strong: var(--paper-400);
+    --color-accent: var(--paper-50);
+    --color-accent-text: var(--pink-300);
+    --color-link: var(--pink-300);
+    --color-danger: var(--red-300);
+    --color-danger-fill: var(--red-400);
+    --color-focus: var(--blue-400);
+    --color-backdrop: rgba(0, 0, 0, 0.6);
+    --color-disabled-icon: var(--paper-700);
+    --color-grabber: var(--paper-700);
+    --color-map-placeholder: var(--paper-900);
+    --color-note: var(--paper-50);
+    --color-shadow: #000000;
+
+    --color-pin: var(--violet-400);
+    --color-pin-border: var(--paper-950);
+    --color-layer-1: var(--yellow-200);
+    --color-layer-2: var(--pink-400);
+    --color-layer-3: var(--green-300);
+    --color-layer-4: var(--orange-300);
+    --color-layer-5: var(--blue-400);
+    --color-layer-6: var(--red-400);
+    --color-pin-result: var(--paper-400);
+    --color-gps: var(--blue-400);
+    --pin-blend: screen;
+    --color-logo-1: var(--pink-400);
+    --color-logo-2: var(--blue-400);
+    --logo-blend: screen;
+    --highlight-blend: normal;
+
+    --shadow-float: 0 1px 6px rgba(0, 0, 0, 0.6);
+    --shadow-sheet: 0 -1px 8px rgba(0, 0, 0, 0.5);
+    --shadow-gps: 0 1px 4px rgba(0, 0, 0, 0.6);
+    --shadow-knob: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.6);
+
+    /* Glossy stock: dark pits instead of fibres, a sheen, and marks that sit on top. */
+    --paper-speck: #000000;
+    --paper-shine: var(--paper-50);
+    --paper-grain: 0.01;
+    --paper-mottle: 0.15;
+    --paper-grain-size: 144px;
+    --paper-mottle-size: 740px;
+    --paper-gloss: 0.15;
+    --paper-porosity: 0.05;
+    --ink-filter: url("#reccos-ink-0");
+    --ink-bleed: 0.5px;
+    --ink-glow: 1px;
+    --paste-shadow: 0.6;
+  }
+}
+
+/* Reduced motion: fades stay, movement and press shrink go. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-distance: 0;
+    --press-scale: 1;
+  }
+}

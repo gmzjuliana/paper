@@ -1,0 +1,84 @@
+/*
+ * Paper: the material a surface is made of. A copy of the app's
+ * components/ui/paper.module.css as plain classes (`class="paper card"`); keep it
+ * in step by hand when the app's changes.
+ *
+ * Layers, bottom to top: the stock's color with a sheen across it (gloss), then
+ * mottle (::before) and grain (::after), each a mask of --paper-speck, then the
+ * content. Nothing here moves or redraws: the tiles are images the browser draws
+ * once, so a sheet made of paper still slides as cheaply as a flat one.
+ *
+ * Per surface, three numbers can be set (as inline custom properties):
+ *   --porosity  0 to 1, how much marks soak in; text spreads a little with it
+ *   --gloss     0 to 1, the sheen's strength
+ *   --seed      shifts the tiles, so two surfaces side by side aren't the same sheet
+ *
+ * Later layers (folds, wear) go in the same stack: more masks over the stock,
+ * placed by --seed, under the content.
+ *
+ * The base rule is wrapped in :where() so it counts for nothing: a component that
+ * composes paper keeps its own position, background and so on, whichever
+ * stylesheet happens to load first.
+ */
+:where(.paper) {
+  --porosity: var(--paper-porosity);
+  --gloss: var(--paper-gloss);
+  --seed: 0;
+  --shine: color-mix(in srgb, var(--paper-shine) calc(var(--gloss) * 100%), transparent);
+  --shine-soft: color-mix(in srgb, var(--paper-shine) calc(var(--gloss) * 40%), transparent);
+  --offset: calc(var(--seed) * var(--paper-seed-step-x)) calc(var(--seed) * var(--paper-seed-step-y));
+
+  position: relative;
+  isolation: isolate;
+  background-color: var(--stock, var(--color-surface));
+  /* Light across a lacquered sheet: a broad glow from one corner, a faint second
+     band lower down. With --gloss at 0 both are transparent. */
+  background-image: linear-gradient(
+    var(--paper-sheen-angle),
+    var(--shine) 0%,
+    transparent var(--paper-sheen-glow-end),
+    transparent var(--paper-sheen-band-start),
+    var(--shine-soft) var(--paper-sheen-band-peak),
+    transparent 100%
+  );
+  /* Ink spreads into soft stock. Inherited, so all text on the sheet gets it. */
+  text-shadow: 0 0 calc(var(--porosity) * var(--ink-bleed)) currentColor;
+}
+
+:where(.paper)::before,
+:where(.paper)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--paper-speck);
+  mask-repeat: repeat;
+  mask-position: var(--offset);
+}
+
+:where(.paper)::before {
+  mask-image: var(--paper-mottle-tile);
+  mask-size: var(--paper-mottle-size);
+  opacity: var(--paper-mottle);
+}
+
+:where(.paper)::after {
+  mask-image: var(--paper-grain-tile);
+  mask-size: var(--paper-grain-size);
+  opacity: var(--paper-grain);
+}
+
+/* Stocks: which of the app's surface colors the sheet is. */
+.page {
+  --stock: var(--color-bg);
+}
+
+.card {
+  --stock: var(--color-surface);
+}
+
+.muted {
+  --stock: var(--color-surface-muted);
+}

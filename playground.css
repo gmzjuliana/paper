@@ -1,0 +1,288 @@
+/* The paper playground's own styles: base resets, then the layout and controls.
+   The paper itself is paper.css; every color and size comes from tokens.css. */
+
+/* The app gets these from next/font; here they come from Google Fonts
+   (index.html). tokens.css builds --font-heading, --font-body and --font-label
+   from them. */
+:root {
+  --font-fraunces: "Fraunces";
+  --font-figtree: "Figtree";
+  --font-courier: "Courier Prime";
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: var(--leading-body);
+  /* A weight or style we didn't load shows as a plain miss, not a smeared fake. */
+  font-synthesis: none;
+  /* Macs draw text heavy, which blurs light text on dark paper. Thin it once, here. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Preview on the left, controls in a column on the right that stays put while
+   the preview scrolls. Narrow windows stack them. */
+.root {
+  min-height: 100dvh;
+  background: var(--color-bg);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+}
+
+.root > main {
+  min-width: 0;
+}
+
+.controls {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-surface-muted);
+  border-left: var(--border-width) solid var(--color-border);
+}
+
+@media (max-width: 760px) {
+  .root {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .controls {
+    position: static;
+    height: auto;
+    border-left: 0;
+  }
+}
+
+/* Preview: the page stock fills the space; one card square sits in the middle. */
+
+.scene {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+.square {
+  width: min(480px, 100%);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-float);
+}
+
+.square-body {
+  aspect-ratio: 1;
+}
+
+/* Controls */
+
+.intro {
+  margin: 0;
+}
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.slider input {
+  width: 100%;
+  accent-color: var(--color-accent);
+}
+
+.slider-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.slider-head output {
+  font-family: var(--font-label);
+  white-space: nowrap;
+}
+
+.hint {
+  display: block;
+  color: var(--color-text-muted);
+}
+
+.export {
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  white-space: pre-wrap;
+  user-select: all;
+}
+
+.scheme-button {
+  flex: 1;
+  min-height: var(--control-sm);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+}
+
+.scheme-button[aria-pressed="true"] {
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  border-color: var(--color-surface-inverse);
+}
+
+/* Top of the controls: mode toggle, Save and Open, always in view. */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-muted);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.save-button {
+  min-height: var(--control-sm);
+  padding: 0 var(--space-5);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  font-weight: var(--weight-button);
+}
+
+.status {
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.small-button {
+  align-self: flex-start;
+  min-height: var(--control-sm);
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+}
+
+.save-button:disabled,
+.small-button:disabled {
+  opacity: 0.5;
+}
+
+.group {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width) solid var(--color-border);
+  font-size: var(--text-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.group > summary {
+  cursor: pointer;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-md);
+  min-height: var(--control-sm);
+  display: flex;
+  align-items: center;
+}
+
+.group[open] > summary {
+  margin-bottom: var(--space-2);
+}
+
+.group > * + * {
+  margin-top: var(--space-3);
+}
+
+.role-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.group > .role-row {
+  margin-top: var(--space-1);
+}
+
+.role-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-xs);
+  border: var(--border-width) solid var(--color-border-strong);
+}
+
+.role-label {
+  min-width: 0;
+}
+
+.role-row select {
+  min-height: var(--control-sm);
+}
+
+/* A slider with its meaning painted on the track (the Hue slider's color wheel). */
+.slider input.painted {
+  appearance: none;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--track);
+}
+
+.painted::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 2px solid var(--color-text);
+}
+
+/* Firefox draws its own track and filled part over the input's background. */
+.painted::-moz-range-track,
+.painted::-moz-range-progress {
+  background: transparent;
+}
+
+.painted::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 2px solid var(--color-text);
+}
